@@ -1,4 +1,4 @@
-# CD Lab 1
+# CD Lab 2
 ##### Name: Paawan Kohli
 ##### Reg No: 180905416
 
@@ -78,17 +78,15 @@ int main() {
 ```
 
 ##### Input file:
-![samplea](./lab2/screenshot/samplea.png)
+![samplea](./screenshot/samplea.png)
 
 
 ##### Terminal:
-![sampleb](./lab2/screenshot/sampleb.png)
+![sampleb](./screenshot/sampleb.png)
 
 
 ##### Output file:
-![samplec](./lab2/screenshot/samplec.png)
-
-\pagebreak
+![samplec](./screenshot/samplec.png)
 
 ### Q1 Replace blank spaces and tabs by single space
 
@@ -136,17 +134,15 @@ void main() {
 ```
 
 ##### Input file:
-![q1a](./lab2/screenshot/q1a.png)
+![q1a](./screenshot/q1a.png)
 
 
 ##### Terminal:
-![q1b](./lab2/screenshot/q1b.png)
+![q1b](./screenshot/q1b.png)
 
 
 ##### Output file:
-![q1c](./lab2/screenshot/q1c.png)
-
-\pagebreak
+![q1c](./screenshot/q1c.png)
 
 ### Q2 Ignore preprocessor directives
 
@@ -214,13 +210,11 @@ void main() {
 ```
 
 ##### Input file:
-![q2a](./lab2/screenshot/q2a.png)
+![q2a](./screenshot/q2a.png)
 
 
 ##### Terminal:
-![q2b](./lab2/screenshot/q2b.png)
-
-\pagebreak
+![q2b](./screenshot/q2b.png)
 
 ### Q3 Convert all keywords to uppercase
 
@@ -312,8 +306,8 @@ void main() {
 ```
 
 ##### Input file:
-![q3a](./lab2/screenshot/q3a.png)
+![q3a](./screenshot/q3a.png)
 
 
 ##### Terminal:
-![q3b](./lab2/screenshot/q3b.png)
+![q3b](./screenshot/q3b.png)

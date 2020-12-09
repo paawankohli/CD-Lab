@@ -1,0 +1,4 @@
+INT 2 3
+INT 3 3
+IF 6 10
+RETURN 12 6
