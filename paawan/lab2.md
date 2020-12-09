@@ -222,7 +222,7 @@ void main() {
 
 \pagebreak
 
-### Q3 uppercase all keywords
+### Q3 Convert all keywords to uppercase
 
 ```c
 #include <stdio.h>
