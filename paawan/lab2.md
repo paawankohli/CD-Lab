@@ -90,7 +90,7 @@ int main() {
 
 \pagebreak
 
-### Q1 replaces blank spaces and tabs by single space
+### Q1 Replace blank spaces and tabs by single space
 
 ```c
 #include <stdio.h>
@@ -148,7 +148,7 @@ void main() {
 
 \pagebreak
 
-### Q2 ignore preprocessor directives
+### Q2 Ignore preprocessor directives
 
 ```c
 #include <stdio.h>
@@ -212,6 +212,15 @@ void main() {
 	fclose(in);
 }
 ```
+
+##### Input file:
+![q2a](./lab2/screenshot/q2a.png)
+
+
+##### Terminal:
+![q2b](./lab2/screenshot/q2b.png)
+
+\pagebreak
 
 ### Q3 uppercase all keywords
 
@@ -301,3 +310,10 @@ void main() {
 	fclose(in);
 }
 ```
+
+##### Input file:
+![q3a](./lab2/screenshot/q3a.png)
+
+
+##### Terminal:
+![q3b](./lab2/screenshot/q3b.png)
