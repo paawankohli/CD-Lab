@@ -3,14 +3,27 @@
 #include <string.h>
 #include <stdlib.h>
 
+// global row and col tracker
 int row = 1;
 int col = 0;
 
-char keyword[][20] = {"int", "if", "else", "while", "for", "char", "do", "bool", "void", "scanf", "printf", "return"};
-int nok = 12;
+char keywords[][20] = {"auto", "break", "case", "char", "const", "continue",
+                       "default", "do", "double", "else", "enum", "extern",
+                       "float", "for", "goto", "if", "int", "long", "register",
+                       "return", "short", "signed", "sizeof", "static", "struct",
+                       "switch", "typedef", "union", "unsigned", "void",
+                       "volatile", "while", "printf", "scanf"
+                      };
+
+// no of keywords = 32 c keywords + printf + scanf
+int nok = 32 + 2;
 
 char datatype[][20] = {"int", "char", "bool", "void"};
+
+// no. of datatypes
 int nod = 4;
+
+
 char dbuff[20];
 
 // when int, char, bool or void is encountered, an identifier is expected. Hence, expectID is set to 1
