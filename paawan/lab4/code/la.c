@@ -7,7 +7,7 @@
 int row = 1;
 int col = 0;
 
-char keywords[][20] = {"auto", "break", "case", "char", "const", "continue",
+char keyword[][20] = {"auto", "break", "case", "char", "const", "continue",
                        "default", "do", "double", "else", "enum", "extern",
                        "float", "for", "goto", "if", "int", "long", "register",
                        "return", "short", "signed", "sizeof", "static", "struct",
@@ -25,27 +25,28 @@ int nod = 4;
 
 char dbuff[20];
 
-// when int, char, bool or void is encountered, an identifier is expected. Hence, expectID is set to 1
+// when int, char, bool or void is encountered, 
+// an identifier is expected. Hence, expectID is set to 1
 int expectID = 0;
 
 char currTableName[20];
 
 typedef struct {
-	char token_name[20];
+	char token_name[50];
 	unsigned int row, col;
 	int index;
 } token;
 
 typedef struct {
 	int index;
-	char Lex_name[20];
+	char Lex_name[50];
 	char type[20];
 	int size;
 } tableRow;
 
 typedef struct {
 	int entries;
-	tableRow tR[20];
+	tableRow tR[50];
 } table;
 
 table currTable;
@@ -59,10 +60,12 @@ void print_table(FILE* out) {
 		return;
 	}
 
-	fprintf(out, "%s\n\tLex_Name\tType\tSize\n", currTableName);
+	fprintf(out, "%s\n", currTableName);
+	fprintf(out, "\tLex_Name\tType\tSize\n");
 
 	for (int i = 0; i < currTable.entries; i++) {
-		fprintf(out, "%d\t%s\t\t%s\t%d\n", currTable.tR[i].index, currTable.tR[i].Lex_name, currTable.tR[i].type, currTable.tR[i].size);
+		fprintf(out, "%d\t%s\t\t%s\t%d\n", currTable.tR[i].index, 
+			currTable.tR[i].Lex_name, currTable.tR[i].type, currTable.tR[i].size);
 	}
 
 	fprintf(out, "\n");
@@ -70,19 +73,23 @@ void print_table(FILE* out) {
 
 token create_token(char n[], int r, int c, int i) {
 	token m;
+	
 	strcpy(m.token_name, n);
 	m.row = r;
 	m.col = c;
 	m.index = i;
+	
 	return m;
 }
 
 void insert(char n[], char t[], int s) {
 	int m = currTable.entries;
+
 	currTable.tR[m].index = m + 1;
 	strcpy(currTable.tR[m].Lex_name, n);
 	strcpy(currTable.tR[m].type, t);
 	currTable.tR[m].size = s;
+	
 	currTable.entries++;
 }
 
@@ -96,77 +103,6 @@ int search(char* name) {
 			return i + 1;
 
 	return 0;
-}
-
-token ArOp(int key, int r, int c) {
-	switch (key) {
-	case 1:
-		return create_token("ADD", r, c, -1);
-	case 2:
-		return create_token("SUB", r, c, -1);
-	case 3:
-		return create_token("MUL", r, c, -1);
-	case 4:
-		return create_token("DIV", r, c, -1);
-	case 5:
-		return create_token("MOD", r, c, -1);
-	case 6:
-		return create_token("INC", r, c, -1);
-	case 7:
-		return create_token("DEC", r, c, -1);
-	}
-}
-
-token RelOp(int key, int r, int c) {
-	switch (key) {
-	case 1:
-		return create_token("EQ", r, c, -1);
-	case 2:
-		return create_token("NE", r, c, -1);
-	case 3:
-		return create_token("GT", r, c, -1);
-	case 4:
-		return create_token("LT", r, c, -1);
-	case 5:
-		return create_token("GE", r, c, -1);
-	case 6:
-		return create_token("LE", r, c, -1);
-	}
-}
-
-token LogOp(int key, int r, int c) {
-	switch (key) {
-	case 1:
-		return create_token("AND", r, c, -1);
-	case 2:
-		return create_token("ORR", r, c, -1);
-	case 3:
-		return create_token("NOT", r, c, -1);
-	}
-}
-
-token AssOp(int key, int r, int c) {
-	switch (key) {
-	case 1:
-		return create_token("ASS", r, c, -1);
-	case 2:
-		return create_token("ADA", r, c, -1);
-	case 3:
-		return create_token("SBA", r, c, -1);
-	case 4:
-		return create_token("MLA", r, c, -1);
-	case 5:
-		return create_token("DVA", r, c, -1);
-	case 6:
-		return create_token("MDA", r, c, -1);
-	}
-}
-
-token SpecChar(char n, int r, int c, int i) {
-	char temp[2];
-	temp[0] = n;
-	temp[1] = '\0';
-	return create_token(temp, r, c, i);
 }
 
 int getNextToken(FILE* f, FILE* out, FILE* st) {
@@ -250,14 +186,14 @@ int getNextToken(FILE* f, FILE* out, FILE* st) {
 		c = getc(f);
 
 		if (c == '+') {
-			T = ArOp(6, row, col);
+			T = create_token("++", row, col, -1);
 			col++;
 		} else if (c == '=') {
-			T = AssOp(2, row, col);
+			T = create_token("+=", row, col, -1);
 			col++;
 		} else {
 			fseek(f, -1, SEEK_CUR);
-			T = ArOp(1, row, col);
+			T = create_token("+", row, col, -1);
 		}
 
 	}
@@ -266,14 +202,14 @@ int getNextToken(FILE* f, FILE* out, FILE* st) {
 	else if (c == '-') {
 		c = getc(f);
 		if (c == '-') {
-			T = ArOp(7, row, col);
+			T = create_token("--", row, col, -1);
 			col++;
 		} else if (c == '=') {
-			T = AssOp(3, row, col);
+			T = create_token("-=", row, col, -1);
 			col++;
 		} else {
 			fseek(f, -1, SEEK_CUR);
-			T = ArOp(2, row, col);
+			T = create_token("-", row, col, -1);
 		}
 	}
 
@@ -281,11 +217,11 @@ int getNextToken(FILE* f, FILE* out, FILE* st) {
 	else if (c == '*') {
 		c = getc(f);
 		if (c == '=') {
-			T = AssOp(4, row, col);
+			T = create_token("*=", row, col, -1);
 			col++;
 		} else {
 			fseek(f, -1, SEEK_CUR);
-			T = ArOp(3, row, col);
+			T = create_token("*", row, col, -1);
 		}
 	}
 
@@ -293,11 +229,11 @@ int getNextToken(FILE* f, FILE* out, FILE* st) {
 	else if (c == '/') {
 		c = getc(f);
 		if (c == '=') {
-			T = AssOp(5, row, col);
+			T = create_token("/=", row, col, -1);
 			col++;
 		} else {
 			fseek(f, -1, SEEK_CUR);
-			T = ArOp(4, row, col);
+			T = create_token("/", row, col, -1);
 		}
 	}
 
@@ -305,11 +241,11 @@ int getNextToken(FILE* f, FILE* out, FILE* st) {
 	else if (c == '%') {
 		c = getc(f);
 		if (c == '=') {
-			T = AssOp(6, row, col);
+			T = create_token("%=", row, col, -1);
 			col++;
 		} else {
 			fseek(f, -1, SEEK_CUR);
-			T = ArOp(5, row, col);
+			T = create_token("%", row, col, -1);
 		}
 	}
 
@@ -317,11 +253,11 @@ int getNextToken(FILE* f, FILE* out, FILE* st) {
 	else if (c == '=') {
 		c = getc(f);
 		if (c == '=') {
-			T = RelOp(1, row, col);
+			T = create_token("==", row, col, -1);
 			col++;
 		} else {
 			fseek(f, -1, SEEK_CUR);
-			T = AssOp(1, row, col);
+			T = create_token("=", row, col, -1);
 		}
 	}
 
@@ -329,11 +265,11 @@ int getNextToken(FILE* f, FILE* out, FILE* st) {
 	else if (c == '!') {
 		c = getc(f);
 		if (c == '=') {
-			T = RelOp(2, row, col);
+			T = create_token("!=", row, col, -1);
 			col++;
 		} else {
 			fseek(f, -1, SEEK_CUR);
-			T = LogOp(3, row, col);
+			T = create_token("!", row, col, -1);
 		}
 	}
 
@@ -341,11 +277,11 @@ int getNextToken(FILE* f, FILE* out, FILE* st) {
 	else if (c == '>') {
 		c = getc(f);
 		if (c == '=') {
-			T = RelOp(5, row, col);
+			T = create_token("GE", row, col, -1);
 			col++;
 		} else {
 			fseek(f, -1, SEEK_CUR);
-			T = RelOp(3, row, col);
+			T = create_token("GT", row, col, -1);
 		}
 	}
 
@@ -353,11 +289,11 @@ int getNextToken(FILE* f, FILE* out, FILE* st) {
 	else if (c == '<') {
 		c = getc(f);
 		if (c == '=') {
-			T = RelOp(6, row, col);
+			T = create_token("LE", row, col, -1);
 			col++;
 		} else {
 			fseek(f, -1, SEEK_CUR);
-			T = RelOp(4, row, col);
+			T = create_token("LT", row, col, -1);
 		}
 	}
 
@@ -365,11 +301,11 @@ int getNextToken(FILE* f, FILE* out, FILE* st) {
 	else if (c == '&') {
 		c = getc(f);
 		if (c == '&') {
-			T = LogOp(1, row, col);
+			T = create_token("&&", row, col, -1);
 			col++;
 		} else {
 			fseek(f, -1, SEEK_CUR);
-			T = SpecChar('&', row, col, -1);
+			T = create_token("&", row, col, -1);
 		}
 	}
 
@@ -377,11 +313,11 @@ int getNextToken(FILE* f, FILE* out, FILE* st) {
 	else if (c == '|') {
 		c = getc(f);
 		if (c == '|') {
-			T = LogOp(2, row, col);
+			T = create_token("||", row, col, -1);
 			col++;
 		} else {
 			fseek(f, -1, SEEK_CUR);
-			T = SpecChar('|', row, col, -1);
+			T = create_token("|", row, col, -1);
 		}
 	}
 
@@ -493,7 +429,8 @@ int getNextToken(FILE* f, FILE* out, FILE* st) {
 		col += length - 1;
 		fseek(f, -1, SEEK_CUR);
 	} else {
-		T = SpecChar(c, row, col, -1);
+		char temp[2]; temp[0] = c; temp[1] = '\0';
+		T = create_token(temp, row, col, -1);
 	}
 
 	if (c == ';' || c == '(' || c == '=' || c == ')') {
@@ -510,7 +447,11 @@ int getNextToken(FILE* f, FILE* out, FILE* st) {
 int main() {
 	currTable.entries = 0;
 
-	FILE* f = fopen("sample.c", "r");
+	char filename[20];
+	printf("Enter name of input .c file: ");
+	scanf("%s", filename);
+
+	FILE* f = fopen(filename, "r");
 	FILE* lex = fopen("lex.txt", "w");
 	FILE* st = fopen("st.txt", "w");
 
@@ -521,6 +462,11 @@ int main() {
 	fclose(f);
 	fclose(lex);
 	fclose(st);
+
+	printf("Files generated:\n");
+	printf("   Lexical Analysis:\tlex.txt\n");
+	printf("   Symbol Table:\tst.txt\n");
+
 
 	return 0;
 }
