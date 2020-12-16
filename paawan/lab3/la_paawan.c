@@ -1,4 +1,11 @@
-// Design a lexical analyzer which contains getNextToken( ) for a simple C program to create a structure of token each time and return, which includes row number, column number and token type. The tokens to be identified are arithmetic operators, relational operators, logical operators, special symbols, keywords, numerical constants, string literals and identifiers. Also, getNextToken() should ignore all the tokens when encountered inside single line or multiline comment or inside string literal. Preprocessor directive should also be stripped.
+// Design a lexical analyzer which contains getNextToken() for a simple C program 
+// to create a structure of token each time and return, which includes row number, 
+// column number and token type. The tokens to be identified are arithmetic operators, 
+// relational operators, logical operators, special symbols, keywords, numerical constants, 
+// string literals and identifiers. 
+
+// Also, getNextToken() should ignore all the tokens when encountered inside single line 
+// or multiline comment or inside string literal. Preprocessor directive should also be stripped.
 
 #include <stdio.h>
 #include <string.h>
@@ -70,7 +77,6 @@ int getNextToken() {
 	if (c == '\n') {
 		row++; col = 0;
 		printf("\n");
-		return 1;
 	}
 
 	// ignore spaces and tabs
@@ -80,7 +86,6 @@ int getNextToken() {
 		} while (c == ' ' || c == '\t');
 
 		fseek(in, -1, SEEK_CUR); col--;
-		return 1;
 	}
 
 	// handle comments
@@ -96,7 +101,6 @@ int getNextToken() {
 
 			// update row and col accordingly
 			row++; col = 0;
-			return 1;
 
 		} else if (c == '*') {
 
@@ -118,8 +122,6 @@ int getNextToken() {
 				}
 
 			} while (c != '/');
-
-			return 1;
 		}
 	}
 
@@ -143,8 +145,6 @@ int getNextToken() {
 		} while (c != '\n');
 
 		row++; col = 0;
-		// f(153);
-		return 1;
 	}
 
 	// handle ++, += and +
@@ -159,8 +159,9 @@ int getNextToken() {
 			printToken("+=", row, col - 1);
 			return 1;
 		} else {
-			printToken("+", row, col - 1);
 			fseek(in, -1, SEEK_CUR); col--;
+
+			printToken("+", row, col - 1);
 			return 1;
 		}
 	}
@@ -177,8 +178,9 @@ int getNextToken() {
 			printToken("-=", row, col - 1);
 			return 1;
 		} else {
-			printToken("-", row, col - 1);
 			fseek(in, -1, SEEK_CUR); col--;
+
+			printToken("-", row, col - 1);
 			return 1;
 		}
 	}
@@ -191,8 +193,9 @@ int getNextToken() {
 			printToken("*=", row, col - 1);
 			return 1;
 		} else {
-			printToken("*", row, col - 1);
 			fseek(in, -1, SEEK_CUR); col--;
+
+			printToken("*", row, col - 1);
 			return 1;
 		}
 	}
@@ -205,8 +208,9 @@ int getNextToken() {
 			printToken("/=", row, col - 1);
 			return 1;
 		} else {
-			printToken("/", row, col - 1);
 			fseek(in, -1, SEEK_CUR); col--;
+
+			printToken("/", row, col - 1);
 			return 1;
 		}
 	}
@@ -219,8 +223,9 @@ int getNextToken() {
 			printToken("%=", row, col - 1);
 			return 1;
 		} else {
-			printToken("%", row, col - 1);
 			fseek(in, -1, SEEK_CUR); col--;
+
+			printToken("%", row, col - 1);
 			return 1;
 		}
 	}
@@ -233,8 +238,9 @@ int getNextToken() {
 			printToken("==", row, col - 1);
 			return 1;
 		} else {
-			printToken("=", row, col - 1);
 			fseek(in, -1, SEEK_CUR); col--;
+
+			printToken("=", row, col - 1);
 			return 1;
 		}
 	}
@@ -247,8 +253,9 @@ int getNextToken() {
 			printToken("!=", row, col - 1);
 			return 1;
 		} else {
-			printToken("!", row, col - 1);
 			fseek(in, -1, SEEK_CUR); col--;
+
+			printToken("!", row, col - 1);
 			return 1;
 		}
 	}
@@ -261,8 +268,9 @@ int getNextToken() {
 			printToken(">=", row, col - 1);
 			return 1;
 		} else {
-			printToken(">", row, col - 1);
 			fseek(in, -1, SEEK_CUR); col--;
+
+			printToken(">", row, col - 1);
 			return 1;
 		}
 	}
@@ -275,8 +283,9 @@ int getNextToken() {
 			printToken("<=", row, col - 1);
 			return 1;
 		} else {
-			printToken("<", row, col - 1);
 			fseek(in, -1, SEEK_CUR); col--;
+
+			printToken("<", row, col - 1);
 			return 1;
 		}
 	}
@@ -289,8 +298,9 @@ int getNextToken() {
 			printToken("&&", row, col - 1);
 			return 1;
 		} else {
-			printToken("&", row, col - 1);
 			fseek(in, -1, SEEK_CUR); col--;
+
+			printToken("&", row, col - 1);
 			return 1;
 		}
 	}
@@ -303,8 +313,9 @@ int getNextToken() {
 			printToken("||", row, col - 1);
 			return 1;
 		} else {
-			printToken("|", row, col - 1);
 			fseek(in, -1, SEEK_CUR); col--;
+
+			printToken("|", row, col - 1);
 			return 1;
 		}
 	}
@@ -318,6 +329,7 @@ int getNextToken() {
 	//handle special symbols
 	if (isSplChar(c) == 1) {
 		char temp[2]; temp[0] = c; temp[1] = '\0';
+
 		printToken(temp, row, col);
 		return 1;
 	}
@@ -352,7 +364,6 @@ int getNextToken() {
 		fseek(in, -1, SEEK_CUR); col--;
 
 		printToken("id", row, initialCol);
-		// printToken(buffer, row, initialCol);
 		return 1;
 	}
 
@@ -373,7 +384,6 @@ int getNextToken() {
 		fseek(in, -1, SEEK_CUR); col--;
 
 		printToken(buffer, row, initialCol);
-
 		return 1;
 	}
 
@@ -381,10 +391,13 @@ int getNextToken() {
 }
 
 
-
 void main() {
 
-	if ((in = fopen("sample.c", "r")) == NULL) {
+	char file[50];
+	printf("Enter name of input .c file: ");
+	scanf("%s", file);
+
+	if ((in = fopen(file, "r")) == NULL) {
 		printf("Couldn't open the file\n");
 		exit(1);
 	}
