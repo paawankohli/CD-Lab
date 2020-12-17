@@ -5,7 +5,8 @@
 #include <string.h>
 #include <ctype.h>
 
-char keyword[32][20] = {"auto", "break", "case", "char", "const", "continue",
+char keyword[32][20] = {
+						"auto", "break", "case", "char", "const", "continue",
                         "default", "do", "double", "else", "enum", "extern",
                         "float", "for", "goto", "if", "int", "long", "register",
                         "return", "short", "signed", "sizeof", "static", "struct",
@@ -18,6 +19,7 @@ void main() {
 	char filename[30];
 	printf("Enter name of file: ");
 	scanf("%s", filename);
+
 	printf("\n");
 
 	FILE* in = fopen(filename, "r");
@@ -50,7 +52,6 @@ void main() {
 
 		else {
 			buffer[bufferIndex] = '\0';
-
 
 			// print uppercase if buffer has a keyword
 			for (int i = 0; i < 32 ; i++) {

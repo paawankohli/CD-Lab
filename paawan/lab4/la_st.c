@@ -8,13 +8,14 @@ int row = 1;
 int col = 0;
 
 // keywords
-char keyword[][20] = {"auto", "break", "case", "char", "const", "continue",
-                      "default", "do", "double", "else", "enum", "extern",
-                      "float", "for", "goto", "if", "int", "long", "register",
-                      "return", "short", "signed", "sizeof", "static", "struct",
-                      "switch", "typedef", "union", "unsigned", "void",
-                      "volatile", "while", "printf", "scanf", "bool"
-                     };
+char keyword[][20] = {
+	"auto", "break", "case", "char", "const", "continue",
+	"default", "do", "double", "else", "enum", "extern",
+	"float", "for", "goto", "if", "int", "long", "register",
+	"return", "short", "signed", "sizeof", "static", "struct",
+	"switch", "typedef", "union", "unsigned", "void",
+	"volatile", "while", "printf", "scanf", "bool"
+};
 
 // no of keywords = 32 c keywords + printf + scanf + bool
 int nok = 32 + 3;
@@ -45,12 +46,12 @@ typedef struct {
 
 
 // return a token
-token create_token(char n[], int r, int c, int i) {
+token create_token(char n[], int row, int col, int i) {
 	token m;
 
 	strcpy(m.token_name, n);
-	m.row = r;
-	m.col = c;
+	m.row = row;
+	m.col = col;
 	m.index = i;
 
 	return m;
@@ -380,7 +381,7 @@ int getNextToken(FILE* f, FILE* out, FILE* st) {
 				}
 
 				T = create_token(buffer, row, col, t_index);
-				flag++;
+				flag = 1;
 				break;
 			}
 		}
@@ -390,6 +391,7 @@ int getNextToken(FILE* f, FILE* out, FILE* st) {
 			fseek(f, -1, SEEK_CUR);
 			char cnext = getc(f);
 
+			// function hai
 			if (expectID == 1 && cnext == '(') {
 
 				// print table of previous function
@@ -403,7 +405,9 @@ int getNextToken(FILE* f, FILE* out, FILE* st) {
 
 				// start indexing from 1
 				t_index = 0;
-			} else if (expectID == 1) {
+			} 
+			// normal declaration
+			else if (expectID == 1) {
 				int t_size;
 
 				switch (dbuff[0]) {
@@ -443,6 +447,7 @@ int getNextToken(FILE* f, FILE* out, FILE* st) {
 			else if (cnext == '(') {
 
 				if (search(buffer) == 0) {
+					// it was func name 
 					insert(buffer, "func", -1);
 					t_index = currTable.entries;
 				} else {
@@ -475,6 +480,7 @@ int getNextToken(FILE* f, FILE* out, FILE* st) {
 		T = create_token(temp, row, col, -1);
 	}
 
+	// don't expect id after this
 	if (c == ';' || c == '(' || c == '=' || c == ')') {
 		expectID = 0;
 	}
